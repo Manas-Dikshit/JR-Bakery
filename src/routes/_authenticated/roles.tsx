@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { useAuth, isSuperAdmin, type Role } from "@/lib/auth";
 import { ShieldAlert } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/roles" as any)({
+createFileRoute("/_authenticated/roles")({
   head: () => ({ meta: [{ title: "User Roles — JR Bakery ERP" }] }),
   component: RolesPage,
 });

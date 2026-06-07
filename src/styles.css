@@ -123,5 +123,27 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  body { background-color: var(--color-background); color: var(--color-foreground); font-feature-settings: "cv02", "cv03", "cv04", "cv11"; }
+  html { scroll-behavior: smooth; }
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-color: var(--color-background);
+    background-image:
+      radial-gradient(circle at top left, color-mix(in oklab, var(--color-primary) 10%, transparent), transparent 28%),
+      radial-gradient(circle at top right, color-mix(in oklab, var(--color-chart-2) 9%, transparent), transparent 24%);
+    color: var(--color-foreground);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: color-mix(in oklab, var(--color-primary) 20%, transparent); color: var(--color-foreground); }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--color-muted-foreground) 28%, transparent); border-radius: 9999px; border: 2px solid transparent; background-clip: padding-box; }
+  *::-webkit-scrollbar-track { background: transparent; }
+}
+
+@layer utilities {
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }

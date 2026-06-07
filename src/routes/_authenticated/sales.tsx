@@ -14,7 +14,7 @@ import { inr, fmt } from "@/lib/format";
 import { useAuth, canEdit, isSuperAdmin } from "@/lib/auth";
 import { openInvoicePDF } from "../../lib/pdf";
 
-export const Route = createFileRoute("/_authenticated/sales" as any)({
+createFileRoute("/_authenticated/sales")({
   head: () => ({ meta: [{ title: "Sales — JR Bakery ERP" }] }),
   component: SalesPage,
 });

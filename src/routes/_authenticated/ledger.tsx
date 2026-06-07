@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { inr } from "@/lib/format";
 
-export const Route = createFileRoute("/_authenticated/ledger" as any)({
+export const Route = createFileRoute("/_authenticated/ledger")({
   head: () => ({ meta: [{ title: "Ledger — JR Bakery ERP" }] }),
   component: LedgerPage,
 });

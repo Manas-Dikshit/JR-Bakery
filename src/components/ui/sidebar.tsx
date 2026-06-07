@@ -135,7 +135,7 @@ const SidebarProvider = React.forwardRef<
               } as React.CSSProperties
             }
             className={cn(
-              "group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar",
+              "group/sidebar-wrapper flex min-h-svh w-full has-data-[variant=inset]:bg-sidebar",
               className,
             )}
             ref={ref}
@@ -192,7 +192,7 @@ const Sidebar = React.forwardRef<
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"
-            className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+            className="w-(--sidebar-width) border-border/60 bg-sidebar/95 p-0 text-sidebar-foreground shadow-[0_30px_90px_-40px_rgba(15,23,42,0.6)] backdrop-blur-2xl [&>button]:hidden"
             style={
               {
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -226,7 +226,7 @@ const Sidebar = React.forwardRef<
             "group-data-[collapsible=offcanvas]:w-0",
             "group-data-[side=right]:rotate-180",
             variant === "floating" || variant === "inset"
-              ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]"
+              ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]"
               : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
           )}
         />
@@ -234,11 +234,11 @@ const Sidebar = React.forwardRef<
           className={cn(
             "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
             side === "left"
-              ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]"
-              : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
+              ? "left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)"
+              : "right-0 group-data-[collapsible=offcanvas]:-right-(--sidebar-width)",
             // Adjust the padding for floating and inset variants.
             variant === "floating" || variant === "inset"
-              ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]"
+              ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
               : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l",
             className,
           )}
@@ -246,7 +246,7 @@ const Sidebar = React.forwardRef<
         >
           <div
             data-sidebar="sidebar"
-            className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow"
+            className="flex h-full w-full flex-col bg-sidebar/90 backdrop-blur-2xl group-data-[variant=floating]:rounded-3xl group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border/70 group-data-[variant=floating]:shadow-[0_20px_60px_-32px_rgba(15,23,42,0.35)]"
           >
             {children}
           </div>
@@ -296,9 +296,9 @@ const SidebarRail = React.forwardRef<HTMLButtonElement, React.ComponentProps<"bu
         onClick={toggleSidebar}
         title="Toggle Sidebar"
         className={cn(
-          "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex",
-          "[[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize",
-          "[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize",
+          "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-0.5 hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex",
+          "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
+          "in-data-[side=left][data-state=collapsed]:cursor-e-resize in-data-[side=right][data-state=collapsed]:cursor-w-resize",
           "group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full group-data-[collapsible=offcanvas]:hover:bg-sidebar",
           "[[data-side=left][data-collapsible=offcanvas]_&]:-right-2",
           "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2",
