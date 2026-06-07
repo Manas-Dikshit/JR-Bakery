@@ -1,6 +1,6 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarTrigger, SidebarFooter } from "@/components/ui/sidebar";
-import { LayoutDashboard, Package, Truck, ShoppingCart, Cookie, BookOpen, Factory, Users, Receipt, Wallet, Trash2, BarChart3, ChefHat, LogOut, ClipboardCheck, Wrench, ShieldCheck, AlertTriangle } from "lucide-react";
+import { LayoutDashboard, Package, Truck, ShoppingCart, Cookie, BookOpen, Factory, Users, Receipt, Wallet, Trash2, BarChart3, ChefHat, LogOut, ClipboardCheck, Wrench, ShieldCheck, AlertTriangle, CreditCard, BookText, UserCog } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,8 @@ const groups = [
   { label: "Commerce", items: [
     { title: "Customers", url: "/customers", icon: Users },
     { title: "Sales", url: "/sales", icon: Receipt },
+    { title: "Payments", url: "/payments", icon: CreditCard },
+    { title: "Ledger", url: "/ledger", icon: BookText },
     { title: "Expenses", url: "/expenses", icon: Wallet },
     { title: "Daily Closing", url: "/closing", icon: ClipboardCheck },
   ]},
@@ -32,6 +34,9 @@ const groups = [
     { title: "Reports", url: "/reports", icon: BarChart3 },
     { title: "Variance", url: "/variance", icon: AlertTriangle },
     { title: "Audit Log", url: "/audit", icon: ShieldCheck },
+  ]},
+  { label: "Admin", items: [
+    { title: "User Roles", url: "/roles", icon: UserCog },
   ]},
 ];
 
