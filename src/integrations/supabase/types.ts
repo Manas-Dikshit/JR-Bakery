@@ -47,6 +47,50 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          customer_id: string
+          id: string
+          method: string
+          notes: string | null
+          payment_date: string
+          reference: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          customer_id: string
+          id?: string
+          method?: string
+          notes?: string | null
+          payment_date?: string
+          reference?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string
+          id?: string
+          method?: string
+          notes?: string | null
+          payment_date?: string
+          reference?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_payments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       customers: {
         Row: {
           address: string | null
@@ -432,7 +476,9 @@ export type Database = {
           created_by: string | null
           customer_id: string | null
           id: string
+          invoice_no: string | null
           notes: string | null
+          paid_amount: number
           payment_type: string
           product_id: string
           quantity: number
@@ -445,7 +491,9 @@ export type Database = {
           created_by?: string | null
           customer_id?: string | null
           id?: string
+          invoice_no?: string | null
           notes?: string | null
+          paid_amount?: number
           payment_type?: string
           product_id: string
           quantity: number
@@ -458,7 +506,9 @@ export type Database = {
           created_by?: string | null
           customer_id?: string | null
           id?: string
+          invoice_no?: string | null
           notes?: string | null
+          paid_amount?: number
           payment_type?: string
           product_id?: string
           quantity?: number
@@ -536,6 +586,50 @@ export type Database = {
           },
         ]
       }
+      supplier_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          id: string
+          method: string
+          notes: string | null
+          payment_date: string
+          reference: string | null
+          supplier_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          method?: string
+          notes?: string | null
+          payment_date?: string
+          reference?: string | null
+          supplier_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          method?: string
+          notes?: string | null
+          payment_date?: string
+          reference?: string | null
+          supplier_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_payments_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       suppliers: {
         Row: {
           address: string | null
@@ -545,6 +639,7 @@ export type Database = {
           gst_number: string | null
           id: string
           name: string
+          outstanding: number
           payment_terms: string | null
           phone: string | null
           updated_at: string
@@ -557,6 +652,7 @@ export type Database = {
           gst_number?: string | null
           id?: string
           name: string
+          outstanding?: number
           payment_terms?: string | null
           phone?: string | null
           updated_at?: string
@@ -569,6 +665,7 @@ export type Database = {
           gst_number?: string | null
           id?: string
           name?: string
+          outstanding?: number
           payment_terms?: string | null
           phone?: string | null
           updated_at?: string
