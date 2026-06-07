@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="JR Bakery ERP">
+  <rect width="64" height="64" rx="16" fill="#8b5a2b"/>
+  <path d="M18 28c0-7.7 6.3-14 14-14s14 6.3 14 14v10H18V28Z" fill="#f4d6a0"/>
+  <path d="M16 38h32v8c0 2.2-1.8 4-4 4H20c-2.2 0-4-1.8-4-4v-8Z" fill="#f7e7c8"/>
+  <path d="M24 20c2.4 2.8 5.1 4.2 8 4.2S37.6 22.8 40 20" fill="none" stroke="#8b5a2b" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="24" cy="34" r="2" fill="#8b5a2b"/>
+  <circle cx="32" cy="34" r="2" fill="#8b5a2b"/>
+  <circle cx="40" cy="34" r="2" fill="#8b5a2b"/>
+</svg>
