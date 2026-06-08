@@ -43,8 +43,8 @@ function CustomerLedger() {
     enabled: !!selected,
     queryFn: async () => {
       const [sales, pays] = await Promise.all([
-        (supabase as any).from("sales").select("sale_date,total_amount,invoice_no,payment_type").eq("customer_id", selected).order("sale_date"),
-        (supabase as any).from("customer_payments").select("payment_date,amount,method,reference").eq("customer_id", selected).order("payment_date"),
+        supabase.from("sales").select("sale_date,total_amount,invoice_no,payment_type").eq("customer_id", selected).order("sale_date"),
+        supabase.from("customer_payments").select("payment_date,amount,method,reference").eq("customer_id", selected).order("payment_date"),
       ]);
       const events = [
         ...(sales.data ?? []).map((s: any) => ({ date: s.sale_date, type: "Sale", debit: Number(s.total_amount), credit: 0, ref: s.invoice_no ?? s.payment_type })),
@@ -105,8 +105,8 @@ function SupplierLedger() {
     enabled: !!selected,
     queryFn: async () => {
       const [purs, pays] = await Promise.all([
-        (supabase as any).from("purchases").select("purchase_date,total_amount,invoice_number").eq("supplier_id", selected).order("purchase_date"),
-        (supabase as any).from("supplier_payments").select("payment_date,amount,method,reference").eq("supplier_id", selected).order("payment_date"),
+        supabase.from("purchases").select("purchase_date,total_amount,invoice_number").eq("supplier_id", selected).order("purchase_date"),
+        supabase.from("supplier_payments").select("payment_date,amount,method,reference").eq("supplier_id", selected).order("payment_date"),
       ]);
       const events = [
         ...(purs.data ?? []).map((p: any) => ({ date: p.purchase_date, type: "Purchase", credit: Number(p.total_amount), debit: 0, ref: p.invoice_number ?? "—" })),

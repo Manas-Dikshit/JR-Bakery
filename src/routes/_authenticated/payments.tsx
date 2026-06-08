@@ -14,7 +14,7 @@ import { toast } from "sonner";
 import { inr } from "@/lib/format";
 import { useAuth, canEdit, isSuperAdmin } from "@/lib/auth";
 
-createFileRoute("/_authenticated/payments")({
+export const Route = createFileRoute("/_authenticated/payments")({
   head: () => ({ meta: [{ title: "Payments — JR Bakery ERP" }] }),
   component: PaymentsPage,
 });

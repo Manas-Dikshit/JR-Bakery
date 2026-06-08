@@ -12,9 +12,9 @@ import { Plus, Trash2, FileText, X } from "lucide-react";
 import { toast } from "sonner";
 import { inr, fmt } from "@/lib/format";
 import { useAuth, canEdit, isSuperAdmin } from "@/lib/auth";
-import { openInvoicePDF } from "../../lib/pdf";
+import { openInvoicePDF } from "@/lib/pdf";
 
-createFileRoute("/_authenticated/sales")({
+export const Route = createFileRoute("/_authenticated/sales")({
   head: () => ({ meta: [{ title: "Sales — JR Bakery ERP" }] }),
   component: SalesPage,
 });
@@ -43,7 +43,7 @@ function SalesPage() {
   const invoices = useMemo(() => {
     const map = new Map<string, any[]>();
     for (const s of sales) {
-      const key = (s as any).invoice_no || `s-${s.id}`;
+      const key = s.invoice_no || `s-${s.id}`;
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(s);
     }
@@ -94,7 +94,7 @@ function SalesPage() {
           notes: notes || null,
         };
       });
-      const { error } = await supabase.from("sales").insert(rows as any);
+      const { error } = await supabase.from("sales").insert(rows);
       if (error) throw error;
       return { invNo, rows, customer: customers.find((c: any) => c.id === customerId), totalAll, paidAll };
     },
@@ -193,7 +193,7 @@ function SalesPage() {
 
                 <div className="flex justify-between items-center border-t pt-3 sticky bottom-0 bg-background">
                   <div className="text-lg font-semibold">Total: {inr(subtotal)}</div>
-                  <DialogFooter><Button type="submit" disabled={create.isPending}>Save & Print</Button></DialogFooter>
+                  <DialogFooter className="!mt-0"><Button type="submit" disabled={create.isPending}>Save & Print</Button></DialogFooter>
                 </div>
               </form>
             </DialogContent>

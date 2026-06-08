@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -105,16 +104,16 @@ export function CrudPage({ title, description, table, select = "*", orderBy, col
             <DialogTrigger asChild>
               <Button><Plus className="h-4 w-4 mr-1" />New</Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg w-full">
+            <DialogContent className="max-w-lg">
               <DialogHeader><DialogTitle>Add {title.replace(/s$/, "")}</DialogTitle></DialogHeader>
-              <form onSubmit={submit} className="space-y-3 max-h-[60vh] overflow-y-auto pr-1 sm:pr-0">
+              <form onSubmit={submit} className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
                 {fields.map((f) => (
                   <div key={f.name}>
                     <Label>{f.label}{f.required && " *"}</Label>
                     {f.type === "select" ? (
                       <select
                         required={f.required}
-                        className="flex h-10 w-full rounded-2xl border border-input/70 bg-background/80 px-3 py-2 text-sm"
+                        className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
                         value={form[f.name] ?? ""}
                         onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
                       >
@@ -122,9 +121,9 @@ export function CrudPage({ title, description, table, select = "*", orderBy, col
                         {f.options?.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
                       </select>
                     ) : f.type === "textarea" ? (
-                      <Textarea
+                      <textarea
                         required={f.required}
-                        className="min-h-16"
+                        className="flex w-full min-h-16 rounded-md border border-input bg-background px-3 py-2 text-sm"
                         value={form[f.name] ?? ""}
                         onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
                       />
