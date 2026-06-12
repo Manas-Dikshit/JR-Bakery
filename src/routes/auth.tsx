@@ -41,14 +41,23 @@ function AuthPage() {
 
   const signUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (password.length < 8) return toast.error("Use at least 8 characters for your password.");
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email, password,
       options: { emailRedirectTo: `${window.location.origin}/dashboard`, data: { full_name: fullName } },
     });
     setLoading(false);
     if (error) return toast.error(error.message);
-    toast.success("Account created — check email to confirm, then sign in.");
+    if (data.session) {
+      toast.success("Welcome to JR Bakery!");
+      navigate({ to: "/dashboard" });
+      return;
+    }
+    // Auto-sign-in fallback if session not returned
+    const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+    if (signInErr) return toast.success("Account created. Please sign in.");
+    navigate({ to: "/dashboard" });
   };
 
   const google = async () => {
@@ -87,8 +96,12 @@ function AuthPage() {
               <form onSubmit={signUp} className="space-y-3 pt-4">
                 <div><Label>Full name</Label><Input required value={fullName} onChange={(e) => setFullName(e.target.value)} /></div>
                 <div><Label>Email</Label><Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></div>
-                <div><Label>Password</Label><Input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} /></div>
-                <Button type="submit" disabled={loading} className="w-full">Create account</Button>
+                <div>
+                  <Label>Password</Label>
+                  <Input type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} />
+                  <p className="text-[11px] text-muted-foreground mt-1">At least 8 characters. Avoid common passwords.</p>
+                </div>
+                <Button type="submit" disabled={loading} className="w-full">{loading ? "Creating…" : "Create account"}</Button>
                 <p className="text-xs text-muted-foreground text-center">First user becomes Super Admin.</p>
               </form>
             </TabsContent>

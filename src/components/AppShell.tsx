@@ -4,6 +4,7 @@ import { LayoutDashboard, Package, Truck, ShoppingCart, Cookie, BookOpen, Factor
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import { DateHeader } from "@/components/DateHeader";
 import type { ReactNode } from "react";
 
 const groups = [
@@ -108,8 +109,8 @@ export function AppShell({ children }: { children: ReactNode }) {
             <div className="flex items-center gap-2 min-w-0">
               <span className="font-semibold text-sm sm:text-base truncate">{currentTitle}</span>
             </div>
-            <div className="ml-auto hidden sm:flex items-center text-xs text-muted-foreground">
-              JR Bakery ERP
+            <div className="ml-auto flex items-center gap-2">
+              <DateHeader />
             </div>
           </header>
           <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>

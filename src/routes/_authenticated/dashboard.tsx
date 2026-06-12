@@ -4,9 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TrendingUp, IndianRupee, Factory, Wallet, Package, AlertTriangle, Receipt, ShoppingCart, ArrowUpRight } from "lucide-react";
+import { TrendingUp, IndianRupee, Factory, Wallet, Package, AlertTriangle, Receipt, ShoppingCart, ArrowUpRight, CheckCircle2, BellRing } from "lucide-react";
 import { inr, fmt } from "@/lib/format";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — JR Bakery ERP" }] }),
@@ -68,22 +69,28 @@ function Dashboard() {
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-7xl mx-auto">
+      {/* Daily reminder banner */}
+      <DailyReminderBanner />
+
       {/* Hero header */}
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
-            Welcome back 👋
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Here's what's happening at <span className="gradient-text font-medium">JR Bakery</span> today.
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {quickActions.map((a) => (
-            <Button key={a.to} asChild variant="outline" size="sm" className="card-hover">
-              <Link to={a.to}><a.icon className="h-4 w-4" />{a.label}</Link>
-            </Button>
-          ))}
+      <div className="relative overflow-hidden rounded-2xl border bg-card p-5 sm:p-7 soft-shadow">
+        <div className="absolute inset-0 -z-0 opacity-70" style={{ background: "var(--gradient-mesh)" }} />
+        <div className="relative flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+              Welcome back <span className="inline-block animate-[wave_2s_ease-in-out_infinite] origin-bottom-right">👋</span>
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Here's what's happening at <span className="gradient-text font-semibold">JR Bakery</span> today.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {quickActions.map((a) => (
+              <Button key={a.to} asChild variant="default" size="sm" className="card-hover shadow-sm">
+                <Link to={a.to}><a.icon className="h-4 w-4" />{a.label}</Link>
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -173,6 +180,59 @@ function Dashboard() {
           </CardContent>
         </Card>
       )}
+    </div>
+  );
+}
+
+function DailyReminderBanner() {
+  const { user, role } = useAuth();
+  const isStaff = role === "operator" || role === "manager" || role === "super_admin";
+  const today = new Date().toISOString().slice(0, 10);
+
+  const { data } = useQuery({
+    enabled: !!user && isStaff,
+    queryKey: ["daily-fill", today, user?.id],
+    queryFn: async () => {
+      const [sales, prod, exp] = await Promise.all([
+        supabase.from("sales").select("id", { count: "exact", head: true }).eq("sale_date", today),
+        supabase.from("production").select("id", { count: "exact", head: true }).eq("production_date", today),
+        supabase.from("expenses").select("id", { count: "exact", head: true }).eq("expense_date", today),
+      ]);
+      return {
+        sales: sales.count ?? 0,
+        production: prod.count ?? 0,
+        expenses: exp.count ?? 0,
+      };
+    },
+  });
+
+  if (!isStaff || !data) return null;
+  const complete = data.sales > 0 && data.production > 0;
+  if (complete) {
+    return (
+      <div className="flex items-center gap-3 rounded-xl border border-primary/30 bg-primary/5 px-4 py-3 text-sm">
+        <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />
+        <div className="flex-1">
+          <div className="font-medium">Today's entries logged</div>
+          <div className="text-muted-foreground text-xs">{data.sales} sales · {data.production} production · {data.expenses} expenses</div>
+        </div>
+      </div>
+    );
+  }
+  const missing: string[] = [];
+  if (data.sales === 0) missing.push("Sales");
+  if (data.production === 0) missing.push("Production");
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-center gap-3 rounded-xl border border-warning/40 bg-gradient-to-r from-warning/10 to-transparent px-4 py-3 text-sm">
+      <BellRing className="h-5 w-5 text-warning-foreground shrink-0 pulse-soft" style={{ color: "oklch(0.55 0.15 75)" }} />
+      <div className="flex-1">
+        <div className="font-medium">Daily entries pending</div>
+        <div className="text-muted-foreground text-xs">Please log {missing.join(" and ")} for today before 10 PM.</div>
+      </div>
+      <div className="flex gap-2">
+        {data.sales === 0 && <Button asChild size="sm"><Link to="/sales">Add sale</Link></Button>}
+        {data.production === 0 && <Button asChild size="sm" variant="outline"><Link to="/production">Log production</Link></Button>}
+      </div>
     </div>
   );
 }
